@@ -135,7 +135,7 @@ console.log(mevsimler.sonraki());
 console.log(mevsimler.sonraki());
 console.log(mevsimler.sonraki());
 
-function Araba(/*kodlar buraya */) {
+function Araba(/*kodlar buraya */ isim, depoBenzin, kml) {
   /**
    * [Görev 6A] Araba 3 argüman alarak bir araba nesnesi oluşturur
    * @param {string} isim - arabanın ismi
@@ -146,6 +146,7 @@ function Araba(/*kodlar buraya */) {
   this.odometer = 0; // araba 0 kilometrede yüklenecek
   this.depo = depoBenzin; // araba full depoyla yüklenecek
   // ✨ gerekli propları ekleyin
+  this.maxDepo = depoBenzin;
 
   /**
    * [Görev 6B] sur metodu odometera km ekler ve aynı oranda depodan benzin tüketir
@@ -162,6 +163,16 @@ function Araba(/*kodlar buraya */) {
    */
   this.sur = (gidilecekyol) => {
     // ✨ kodlar buraya
+    let maxMesafe = kml * this.depo; //arabanın gidebileceği max mesafe(güncel), her adımda değişiyor.
+    if (gidilecekyol <= maxMesafe) {
+      this.odometer = this.odometer + gidilecekyol; //kümülatif şekilde artıyor.
+      let harcananBenzin = gidilecekyol / kml;
+      this.depo = this.depo - harcananBenzin;
+      return this.odometer;
+    }
+    this.depo = 0;
+    this.odometer = this.odometer + maxMesafe;
+    return this.odometer;
   };
 
   /**
@@ -177,9 +188,30 @@ function Araba(/*kodlar buraya */) {
    */
   this.benzinal = (litre) => {
     // ✨ kodlar buraya
+    let kalanDepo = this.maxDepo - this.depo;
+    let maxGidilecekKm;
+
+    if (litre <= kalanDepo) {
+      this.depo = this.depo + litre;
+      maxGidilecekKm = this.depo * kml;
+      return maxGidilecekKm;
+    }
+
+    this.depo = this.maxDepo;
+    maxGidilecekKm = this.depo * kml;
+    return maxGidilecekKm;
   };
 }
 
+const focus = new Araba("focus", 20, 30);
+console.log(focus.sur(100));
+console.log(focus.sur(100));
+console.log(focus.sur(100));
+console.log(focus.sur(200));
+console.log(focus.sur(900));
+
+focus.benzinal(50);
+console.log(focus.sur(700)); //1200
 /**
  * [Görev 7] Bir sayının çift olup olmadığını asenkron olarak çözümler
  * @param {number} sayi - kontrol edilecek sayı
@@ -193,9 +225,29 @@ function Araba(/*kodlar buraya */) {
  *    // sonuç false
  * })
  */
+function senkronCiftSayi(sayi) {
+  return sayi % 2 == 0;
+}
+
+console.log(asenkronCiftSayi(5) /*false*/);
+console.log(asenkronCiftSayi(4) /*true*/);
+
 function asenkronCiftSayi(sayi) {
   // ✨ implement
+  return new Promise((res) => {
+    res(sayi % 2 == 0);
+  });
 }
+asenkronCiftSayi(4).then((result) => {
+  console.log(result);
+});
+asenkronCiftSayi(6).then(function (result) {
+  console.log(result);
+});
+
+asenkronCiftSayi(3).then((result) => {
+  console.log(result);
+});
 
 module.exports = {
   nesneyiTrimle,
