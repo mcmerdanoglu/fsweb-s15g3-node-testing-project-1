@@ -8,8 +8,16 @@
  */
 function nesneyiTrimle(obj) {
   // ✨ kodlar buraya
+  for (let prop in obj) {
+    let val = obj[prop]; //köşeli parantez ile objeden value çağırma yöntemi
+    if (typeof val == "string") {
+      //objedeki değerlerin tipi string ise...
+      obj[prop] = val.trim();
+    }
+  }
+  return obj;
 }
-
+console.log(nesneyiTrimle({ isim: "  jane  " }));
 /**
  * [Görev 2] verileniTrimle propları string olan bir nesne alır ve gönderilen propu trimler.
  * @param {object} obj - propları string olan bir nesne
@@ -20,8 +28,13 @@ function nesneyiTrimle(obj) {
  */
 function verileniTrimle(obj, prop) {
   // ✨ kodlar buraya
+  let val = obj[prop];
+  if (typeof val == "string") {
+    obj[prop] = val.trim();
+  }
+  return obj;
 }
-
+console.log(verileniTrimle({ isim: "  jane  ", yas: " 34 " }, "isim"));
 /**
  * [Görev 3] enBuyukTamsayiyiBul bir dizi nesne içinde bulunan tamsayılardan en büyük olanı bulur { tamsayi: 1 }
  * @param {object[]} tamsayilar - bir dizi nesne
@@ -32,17 +45,29 @@ function verileniTrimle(obj, prop) {
  */
 function enBuyukTamsayiyiBul(tamsayilar) {
   // ✨ kodlar buraya
+  let max = -Infinity; //Maximuma -sonsuz gibi en küçük değeri vererek ondan büyük sayıların daha büyük olmasını garanti ediyoruz.
+  let maxDegerIndex = 0;
+  for (let i = 0; i < tamsayilar.length; i++) {
+    const item = tamsayilar[i];
+    if (item.tamsayi > max) {
+      maxDegerIndex = i;
+      max = item.tamsayi;
+    }
+  }
+  return tamsayilar[maxDegerIndex];
 }
+console.log(
+  enBuyukTamsayiyiBul([{ tamsayi: 1 }, { tamsayi: 3 }, { tamsayi: 2 }])
+);
 
 function Sayici(ilkSayi) {
   /**
    * [Görev 4A] Sayici bir sayaç oluşturur
    * @param {number} ilkSayi - Sayacin ilk değeri
    */
-  
-  // ✨ gerekli propları ekleyin
-  
 
+  // ✨ gerekli propları ekleyin
+  let globalSayi = ilkSayi;
   /**
    * [Görev 4B] asagiSay metodu sıfıra doğru sayar
    * @returns {number} - bir sonraki sayı, sıfırdan küçük olamaz
@@ -57,8 +82,22 @@ function Sayici(ilkSayi) {
    */
   this.asagiSay = () => {
     // ✨ kodlar buraya
-  }
+    /*Uzun çözüm*/
+    /*if(globalSayi<=0)
+        return 0;
+    let response = globalSayi;
+    globalSayi = globalSayi-1
+    return response;*/
+    return ilkSayi <= 0 ? 0 : ilkSayi--; /*Kısa çözüm -ternary operator*/
+  };
 }
+
+const sayac = new Sayici(3);
+console.log(sayac.asagiSay());
+console.log(sayac.asagiSay());
+console.log(sayac.asagiSay());
+console.log(sayac.asagiSay());
+console.log(sayac.asagiSay());
 
 function Mevsimler() {
   /**
@@ -66,6 +105,8 @@ function Mevsimler() {
    */
 
   // ✨ gerekli propları ekleyin
+  let mevsimler = ["ilkbahar", "yaz", "sonbahar", "kış"];
+  let currentIndex = 0;
 
   /**
    * [Görev 5B] sonraki metodu bir sonraki mevsimi gösterir
@@ -81,8 +122,18 @@ function Mevsimler() {
    */
   this.sonraki = () => {
     // ✨ kodlar buraya
-  }
+    currentIndex = currentIndex + 1;
+    currentIndex = currentIndex % 4;
+    let mevsim = mevsimler[currentIndex];
+    return mevsim;
+  };
 }
+const mevsimler = new Mevsimler();
+console.log(mevsimler.sonraki());
+console.log(mevsimler.sonraki());
+console.log(mevsimler.sonraki());
+console.log(mevsimler.sonraki());
+console.log(mevsimler.sonraki());
 
 function Araba(/*kodlar buraya */) {
   /**
@@ -91,12 +142,10 @@ function Araba(/*kodlar buraya */) {
    * @param {number} depo - benzin deposu kapasitesi
    * @param {number} kml - arabanın litre başına kat edebileceği km yol
    */
- 
-    this.odometer = 0 // araba 0 kilometrede yüklenecek
-    this.depo = depoBenzin // araba full depoyla yüklenecek
-    // ✨ gerekli propları ekleyin
 
-  
+  this.odometer = 0; // araba 0 kilometrede yüklenecek
+  this.depo = depoBenzin; // araba full depoyla yüklenecek
+  // ✨ gerekli propları ekleyin
 
   /**
    * [Görev 6B] sur metodu odometera km ekler ve aynı oranda depodan benzin tüketir
@@ -113,7 +162,7 @@ function Araba(/*kodlar buraya */) {
    */
   this.sur = (gidilecekyol) => {
     // ✨ kodlar buraya
-  }
+  };
 
   /**
    * [Görev 6C] Depoya benzin ekleme
@@ -128,7 +177,7 @@ function Araba(/*kodlar buraya */) {
    */
   this.benzinal = (litre) => {
     // ✨ kodlar buraya
-  }
+  };
 }
 
 /**
@@ -156,4 +205,4 @@ module.exports = {
   Sayici,
   Mevsimler,
   Araba,
-}
+};
